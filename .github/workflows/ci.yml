@@ -13,50 +13,24 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Check SKILL.md
-        run: |
-          if [ -f "skills/michael-polanyi/SKILL.md" ]; then
-            echo "OK: SKILL.md exists"
-          else
-            echo "FAIL: SKILL.md missing"
-            exit 1
-          fi
+        run: test -f skills/michael-polanyi/SKILL.md && echo "OK: SKILL.md" || (echo "FAIL: SKILL.md" && exit 1)
 
       - name: Check examples.md
-        run: |
-          if [ -f "skills/michael-polanyi/examples.md" ]; then
-            echo "OK: examples.md exists"
-          else
-            echo "FAIL: examples.md missing"
-            exit 1
-          fi
+        run: test -f skills/michael-polanyi/examples.md && echo "OK: examples.md" || (echo "FAIL: examples.md" && exit 1)
 
       - name: Check evals.json
-        run: |
-          if [ -f "skills/michael-polanyi/evals/evals.json" ]; then
-            echo "OK: evals.json exists"
-          else
-            echo "FAIL: evals.json missing"
-            exit 1
-          fi
+        run: test -f skills/michael-polanyi/evals/evals.json && echo "OK: evals.json" || (echo "FAIL: evals.json" && exit 1)
 
-      - name: Validate evals.json syntax
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate evals.json
         run: |
-          python3 << 'EOF'
+          python3 -c "
 import json
-import sys
-
-try:
-    with open('skills/michael-polanyi/evals/evals.json') as f:
-        data = json.load(f)
-    print("OK: evals.json is valid JSON")
-except Exception as e:
-    print(f"FAIL: {e}")
-    sys.exit(1)
-
+with open('skills/michael-polanyi/evals/evals.json') as f:
+    data = json.load(f)
 evals = data.get('evals', [])
-if not evals:
-    print("FAIL: no evals found")
-    sys.exit(1)
-
-print(f"OK: {len(evals)} evals found")
-EOF
+print(f'OK: {len(evals)} evals found')
+"
