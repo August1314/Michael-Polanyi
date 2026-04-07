@@ -1,0 +1,80 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files and directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# Skill installation directories (local installs)
+~/.claude/skills/michael-polanyi/
+~/.agents/skills/michael-polanyi/
+
+# Evaluation artifacts
+evals/results/
+evals/outputs/
+evals/snapshots/
+*.eval.log
+eval-comparison-*.md
+
+# Test outputs and temporary files
+*.test.log
+test-output/
+tmp/
+temp/
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.secret
+
+# Build and distribution artifacts
+dist/
+build/
+*.tar.gz
+*.zip
+*.pkg
+
+# Node modules (if tooling is added later)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Python virtual environments (if evals use Python)
+venv/
+.env/
+.envs/
+__pycache__/
+*.pyc
+
+# AI-generated analysis files
+analysis-*.md
+review-*.md
+comparison-*.md
+
+# Local overrides and personal notes
+.notes.md
+scratch.md
+draft-*.md
+*.local.md
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS-level hidden files
+.Spotlight-V100
+.Trashes
+.fseventsd
+.DS_Store

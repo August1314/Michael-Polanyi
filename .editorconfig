@@ -1,0 +1,41 @@
+# EditorConfig helps maintain consistent coding styles
+# https://editorconfig.org
+
+root = true
+
+# Default settings for all files
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Markdown files (primary format for this skill)
+[*.md]
+indent_size = 2
+trim_trailing_whitespace = false
+max_line_length = 100
+
+# YAML frontmatter and config files
+[*.{yml,yaml}]
+indent_size = 2
+
+# Shell scripts
+[*.sh]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+
+# JSON files
+[*.json]
+indent_size = 2
+
+# Git files
+[.gitignore]
+indent_style = tab
+
+# Makefile (if added later)
+[Makefile]
+indent_style = tab
