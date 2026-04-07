@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>michael-polanyi - Eval Review</title>
+    <style>
+        :root {
+            --bg: #faf9f5;
+            --surface: #ffffff;
+            --border: #e8e6dc;
+            --text: #141413;
+            --text-muted: #888;
+            --accent: #d97757;
+            --header-bg: #141413;
+            --header-text: #faf9f5;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: var(--header-bg);
+            color: var(--header-text);
+            padding: 1.5rem 2rem;
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .header .subtitle {
+            opacity: 0.7;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        
+        .main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .summary {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .summary h2 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+        
+        .eval-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .eval-header {
+            background: var(--bg);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .eval-id {
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .eval-name {
+            font-weight: 500;
+        }
+        
+        .eval-body {
+            padding: 1rem;
+        }
+        
+        .field {
+            margin-bottom: 1rem;
+        }
+        
+        .field:last-child {
+            margin-bottom: 0;
+        }
+        
+        .field label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        
+        .prompt-text, .expected-text {
+            background: var(--bg);
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        
+        .assertions-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+        
+        .assertions-table th {
+            text-align: left;
+            padding: 0.5rem;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            font-weight: 500;
+        }
+        
+        .assertions-table td {
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .assertions-table code {
+            background: #f0f0f0;
+            padding: 0.125rem 0.25rem;
+            border-radius: 2px;
+            font-size: 0.75rem;
+        }
+        
+        .type-badge {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            background: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>michael-polanyi</h1>
+        <div class="subtitle">Eval Review — 10 test cases</div>
+    </header>
+    
+    <main class="main">
+        <div class="summary">
+            <h2>Summary</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">10</div>
+                    <div class="stat-label">Total Evals</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">30</div>
+                    <div class="stat-label">Total Assertions</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">2</div>
+                    <div class="stat-label">Non-Trigger Tests</div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="eval-card">
+            <div class="eval-header">
+                <span class="eval-id">#1</span>
+                <span class="eval-name">architecture-judgment</span>
+            </div>
+            <div class="eval-body">
+                <div class="field">
+                    <label>Prompt</label>
+                    <div class="prompt-text">这个架构方案能不能上生产？目前是单体应用，逻辑越来越复杂，但团队只有3个人。</div>
+                </div>
+                <div class="field">
+                    <label>Expected Output</label>
+                    <div class="expected-text">以明确的判断开头，给出具体的诊断信号，提出一个可执行的下一步</div>
+                </div>
+                <div class="field">
+                    <label>Assertions (4)</label>
+                    <table class="assertions-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Pattern</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                <tr>
+                    <td><code>starts_with_clear_judgment</code></td>
+                    <td>Response starts with a clear directional judgment, not a preamble</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>我的判断是|我认为|应该|不应该|可以|不可以</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>contains_practical_signals</code></td>
+                    <td>Contains at least 2 practical diagnostic signals</td>
+                    <td><span class="type-badge">min_count</span></td>
+                    <td><code>是否|信号|看|注意</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>ends_with_concrete_next_step</code></td>
+                    <td>Ends with one specific actionable next step</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>下一步|建议|先</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>no_empty_balance</code></td>
+                    <td>Does not use 'it depends' or 'comprehensive consideration' evasion</td>
+                    <td><span class="type-badge">not_contains</span></td>
+                    <td><code>这取决于|需要综合考虑|建议根据实际情况</code></td>
+                </tr>
+            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="eval-card">
+            <div class="eval-header">
+                <span class="eval-id">#2</span>
+                <span class="eval-name">team-stall</span>
+            </div>
+            <div class="eval-body">
+                <div class="field">
+                    <label>Prompt</label>
+                    <div class="prompt-text">团队推进不动，项目卡在交接环节，该怎么处理？</div>
+                </div>
+                <div class="field">
+                    <label>Expected Output</label>
+                    <div class="expected-text">指出核心矛盾，提供分辨问题的信号，给出一个具体的下一步行动</div>
+                </div>
+                <div class="field">
+                    <label>Assertions (3)</label>
+                    <table class="assertions-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Pattern</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                <tr>
+                    <td><code>names_core_tension</code></td>
+                    <td>Identifies the underlying tension, not surface symptoms</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>不是.*而是|核心|关键|本质</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>provides_diagnostic_questions</code></td>
+                    <td>Provides questions to help diagnose the real issue</td>
+                    <td><span class="type-badge">min_count</span></td>
+                    <td><code>是.*还是|是否</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>specific_action_item</code></td>
+                    <td>Gives one concrete next action, not abstract advice</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>下一步|先把|列出来|画出来</code></td>
+                </tr>
+            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="eval-card">
+            <div class="eval-header">
+                <span class="eval-id">#3</span>
+                <span class="eval-name">incomplete-information</span>
+            </div>
+            <div class="eval-body">
+                <div class="field">
+                    <label>Prompt</label>
+                    <div class="prompt-text">我手上信息不完整，但老板现在就要建议，我该怎么答？</div>
+                </div>
+                <div class="field">
+                    <label>Expected Output</label>
+                    <div class="expected-text">提供一个结构化的回答框架，包含已知事实、当前判断和翻转条件</div>
+                </div>
+                <div class="field">
+                    <label>Assertions (4)</label>
+                    <table class="assertions-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Pattern</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                <tr>
+                    <td><code>provides_structured_framework</code></td>
+                    <td>Offers a structured framework for answering</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>三件事|三个|框架|已知|判断|翻转</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>mentions_known_facts</code></td>
+                    <td>Includes guidance on stating what is known</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>已知|确认|事实</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>mentions_flip_conditions</code></td>
+                    <td>Includes guidance on when the judgment would change</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>如果.*变|前提|翻转|改变</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>no_wait_for_more_data</code></td>
+                    <td>Does not suggest waiting for more information</td>
+                    <td><span class="type-badge">not_contains</span></td>
+                    <td><code>先补充|等.*完整|信息不够</code></td>
+                </tr>
+            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="eval-card">
+            <div class="eval-header">
+                <span class="eval-id">#4</span>
+                <span class="eval-name">why-answer-feels-inexperienced</span>
+            </div>
+            <div class="eval-body">
+                <div class="field">
+                    <label>Prompt</label>
+                    <div class="prompt-text">为什么这段回答看起来正确，但不像一个真正做过事的人写的？</div>
+                </div>
+                <div class="field">
+                    <label>Expected Output</label>
+                    <div class="expected-text">指出缺失的具体要素，说明有经验的人会自然带出什么内容</div>
+                </div>
+                <div class="field">
+                    <label>Assertions (3)</label>
+                    <table class="assertions-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Pattern</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                <tr>
+                    <td><code>identifies_missing_elements</code></td>
+                    <td>Names specific things that are missing from the answer</td>
+                    <td><span class="type-badge">min_count</span></td>
+                    <td><code>没有|缺少|缺失|少了</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>describes_practitioner_behavior</code></td>
+                    <td>Describes what an experienced practitioner would naturally include</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>做过.*人|经验.*会|自然.*带出</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>provides_improvement_direction</code></td>
+                    <td>Gives concrete advice on how to improve</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>补|加上|改成</code></td>
+                </tr>
+            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="eval-card">
+            <div class="eval-header">
+                <span class="eval-id">#5</span>
+                <span class="eval-name">career-tacit-knowledge</span>
+            </div>
+            <div class="eval-body">
+                <div class="field">
+                    <label>Prompt</label>
+                    <div class="prompt-text">职业选择的隐性成本有哪些？我现在有两份offer。</div>
+                </div>
+                <div class="field">
+                    <label>Expected Output</label>
+                    <div class="expected-text">列出具体的隐性成本信号，提供分辨的框架，给出判断标准</div>
+                </div>
+                <div class="field">
+                    <label>Assertions (3)</label>
+                    <table class="assertions-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Pattern</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                <tr>
+                    <td><code>lists_specific_costs</code></td>
+                    <td>Lists concrete hidden costs, not abstract concepts</td>
+                    <td><span class="type-badge">min_count</span></td>
+                    <td><code>成本|代价|风险|机会</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>provides_decision_framework</code></td>
+                    <td>Offers a way to think about the decision</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>看|框架|分辨|判断</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>addresses_reversibility</code></td>
+                    <td>Mentions whether the decision is reversible</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>可逆|回头|切换|改变</code></td>
+                </tr>
+            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="eval-card">
+            <div class="eval-header">
+                <span class="eval-id">#6</span>
+                <span class="eval-name">feature-trade-off</span>
+            </div>
+            <div class="eval-body">
+                <div class="field">
+                    <label>Prompt</label>
+                    <div class="prompt-text">这个需求要不要做？做了有收益，但开发成本很高。</div>
+                </div>
+                <div class="field">
+                    <label>Expected Output</label>
+                    <div class="expected-text">给出具体的判断框架，说明什么情况下值得做、什么情况下不应该做</div>
+                </div>
+                <div class="field">
+                    <label>Assertions (3)</label>
+                    <table class="assertions-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Pattern</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                <tr>
+                    <td><code>gives_decision_criteria</code></td>
+                    <td>Provides clear criteria for when to do it vs not</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>如果.*就.*如果|值得.*不.*应该</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>addresses_opportunity_cost</code></td>
+                    <td>Mentions what would be given up by doing this</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>代价|放弃|资源|优先级</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>contains_failure_condition</code></td>
+                    <td>States when this advice would not apply</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>除非|如果.*不|前提</code></td>
+                </tr>
+            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="eval-card">
+            <div class="eval-header">
+                <span class="eval-id">#7</span>
+                <span class="eval-name">code-quality-general</span>
+            </div>
+            <div class="eval-body">
+                <div class="field">
+                    <label>Prompt</label>
+                    <div class="prompt-text">怎么提高代码质量？</div>
+                </div>
+                <div class="field">
+                    <label>Expected Output</label>
+                    <div class="expected-text">提供有实操性的判断，而非泛泛而谈的原则</div>
+                </div>
+                <div class="field">
+                    <label>Assertions (3)</label>
+                    <table class="assertions-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Pattern</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                <tr>
+                    <td><code>not_generic_principles</code></td>
+                    <td>Does not just list abstract principles like 'review', 'test', 'refactor'</td>
+                    <td><span class="type-badge">not_contains</span></td>
+                    <td><code>持续优化|加强.*Review|建立机制</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>provides_concrete_starting_point</code></td>
+                    <td>Gives a specific place to start, not a comprehensive plan</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>先看|从.*开始|最.*是</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>names_real_trade_off</code></td>
+                    <td>Acknowledges a real trade-off in the answer</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>代价|成本|但.*是|不是.*而是</code></td>
+                </tr>
+            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="eval-card">
+            <div class="eval-header">
+                <span class="eval-id">#8</span>
+                <span class="eval-name">tacit-knowledge-debugging</span>
+            </div>
+            <div class="eval-body">
+                <div class="field">
+                    <label>Prompt</label>
+                    <div class="prompt-text">用默会知识的角度，解释一下调试手感是什么？</div>
+                </div>
+                <div class="field">
+                    <label>Expected Output</label>
+                    <div class="expected-text">用具体的实践信号解释抽象概念，而非诉诸神秘</div>
+                </div>
+                <div class="field">
+                    <label>Assertions (3)</label>
+                    <table class="assertions-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Pattern</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                <tr>
+                    <td><code>concrete_not_mystical</code></td>
+                    <td>Explains the concept with concrete observable behaviors</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>信号|模式|经验.*会|注意</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>no_mysticism</code></td>
+                    <td>Does not retreat into 'it can only be felt' mysticism</td>
+                    <td><span class="type-badge">not_contains</span></td>
+                    <td><code>只可意会|不可言传|难以言表|只可</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>gives_examples</code></td>
+                    <td>Provides at least one concrete example</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>比如|例如|像</code></td>
+                </tr>
+            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="eval-card">
+            <div class="eval-header">
+                <span class="eval-id">#9</span>
+                <span class="eval-name">no-trigger-json-extraction</span>
+            </div>
+            <div class="eval-body">
+                <div class="field">
+                    <label>Prompt</label>
+                    <div class="prompt-text">Please extract the JSON data from this report and format it as a table.</div>
+                </div>
+                <div class="field">
+                    <label>Expected Output</label>
+                    <div class="expected-text">不触发此skill，直接执行任务</div>
+                </div>
+                <div class="field">
+                    <label>Assertions (2)</label>
+                    <table class="assertions-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Pattern</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                <tr>
+                    <td><code>no_judgment_opening</code></td>
+                    <td>Does NOT start with 'my judgment is' since this task shouldn't trigger the skill</td>
+                    <td><span class="type-badge">not_contains</span></td>
+                    <td><code>我的判断是</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>direct_task_execution</code></td>
+                    <td>Directly addresses the task request</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>JSON|表格|extract|table|数据</code></td>
+                </tr>
+            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="eval-card">
+            <div class="eval-header">
+                <span class="eval-id">#10</span>
+                <span class="eval-name">no-trigger-pep8-check</span>
+            </div>
+            <div class="eval-body">
+                <div class="field">
+                    <label>Prompt</label>
+                    <div class="prompt-text">Is this Python code compliant with PEP 8?</div>
+                </div>
+                <div class="field">
+                    <label>Expected Output</label>
+                    <div class="expected-text">不触发此skill，直接回答</div>
+                </div>
+                <div class="field">
+                    <label>Assertions (2)</label>
+                    <table class="assertions-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Pattern</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                <tr>
+                    <td><code>no_judgment_opening</code></td>
+                    <td>Does NOT start with practitioner judgment for a factual question</td>
+                    <td><span class="type-badge">not_contains</span></td>
+                    <td><code>我的判断是</code></td>
+                </tr>
+            
+
+                <tr>
+                    <td><code>factual_answer</code></td>
+                    <td>Provides a factual answer about code style</td>
+                    <td><span class="type-badge">text_pattern</span></td>
+                    <td><code>PEP|format|style|规范|缩进|命名</code></td>
+                </tr>
+            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+</body>
+</html>

@@ -4,6 +4,7 @@
 [![License](https://img.shields.io/github/license/August1314/Michael-Polanyi)](https://github.com/August1314/Michael-Polanyi/blob/main/LICENSE)
 [![Claude Code Skill](https://img.shields.io/badge/Claude%20Code-skill-7C3AED)](https://github.com/August1314/Michael-Polanyi)
 [![GitHub Repo stars](https://img.shields.io/github/stars/August1314/Michael-Polanyi?style=social)](https://github.com/August1314/Michael-Polanyi)
+[![CI](https://github.com/August1314/Michael-Polanyi/actions/workflows/ci.yml/badge.svg)](https://github.com/August1314/Michael-Polanyi/actions/workflows/ci.yml)
 
 A writing skill inspired by Michael Polanyi's ideas of tacit knowledge, personal knowledge, and integrative judgment.
 

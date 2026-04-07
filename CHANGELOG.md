@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2026-04-07
+
+### Added
+
+- **.github/workflows/ci.yml**: Complete CI pipeline with 6 jobs:
+  - validate-structure: Check required files and frontmatter
+  - markdown-lint: Markdown syntax and link validation
+  - validate-evals: JSON syntax and required fields
+  - code-quality: Python syntax and formatting
+  - content-quality: SKILL.md length, fluff patterns, examples balance
+  - generate-report: Auto-generate HTML review page
+
+### Changed
+
+- README.md: Added CI badge
+
+---
+
+## [0.4.0] - 2026-04-07
+
+### Added
+
+- **eval-viewer/generate_review.py**: simple HTML review page generator for evals
+- **scripts/aggregate_benchmark.py**: aggregate statistics from multiple eval runs
+- **agents/comparator.md**: blind A/B comparison agent for quality evaluation
+
+### Changed
+
+- Updated "When to Read What" table with new scripts and agents
+
+---
+
+## [0.3.0] - 2026-04-07
+
+### Changed
+
+- **SKILL.md**: streamlined from 340 lines to 122 lines, moved detailed
+  quality checks and anti-pattern detection to separate reference files
+- Updated "When to Read What" table with new reference file paths
+
+### Added
+
+- **references/quality-checks.md**: detailed quality verification patterns,
+  common pitfalls with fixes, and verification checklist
+- **references/anti-patterns.md**: comprehensive AI-generic detection patterns
+  with 8 categories, rewrite strategies, and detection script usage
+
+### Removed
+
+- Detailed Quality Checks section from SKILL.md (moved to references/)
+- Anti-Generic Advice Detection table from SKILL.md (moved to references/)
+
+---
+
 ## [0.2.0] - 2026-04-07
 
 ### Changed
