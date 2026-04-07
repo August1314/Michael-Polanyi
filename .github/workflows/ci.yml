@@ -55,7 +55,9 @@ jobs:
           find . -name "*.md" -type f | while read -r file; do
             # Check for unclosed frontmatter
             if head -1 "$file" | grep -q "^---"; then
-              if ! grep -q "^---" "$file" | head -n 20 | tail -n +2 | grep -q "^---"; then
+              # Get first 20 lines, skip the first line, check for closing ---
+              second_dash=$(head -n 20 "$file" | tail -n +2 | grep -c "^---")
+              if [ "$second_dash" -eq 0 ]; then
                 echo "✗ $file has unclosed frontmatter"
                 exit 1
               fi
