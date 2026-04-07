@@ -3,73 +3,277 @@
   "evals": [
     {
       "id": 1,
+      "eval_name": "architecture-judgment",
       "prompt": "这个架构方案能不能上生产？目前是单体应用，逻辑越来越复杂，但团队只有3个人。",
       "expected_output": "以明确的判断开头，给出具体的诊断信号，提出一个可执行的下一步",
       "files": [],
-      "assertions": []
+      "assertions": [
+        {
+          "name": "starts_with_clear_judgment",
+          "description": "Response starts with a clear directional judgment, not a preamble",
+          "type": "text_pattern",
+          "pattern": "我的判断是|我认为|应该|不应该|可以|不可以"
+        },
+        {
+          "name": "contains_practical_signals",
+          "description": "Contains at least 2 practical diagnostic signals",
+          "type": "min_count",
+          "pattern": "是否|信号|看|注意",
+          "min_count": 2
+        },
+        {
+          "name": "ends_with_concrete_next_step",
+          "description": "Ends with one specific actionable next step",
+          "type": "text_pattern",
+          "pattern": "下一步|建议|先"
+        },
+        {
+          "name": "no_empty_balance",
+          "description": "Does not use 'it depends' or 'comprehensive consideration' evasion",
+          "type": "not_contains",
+          "pattern": "这取决于|需要综合考虑|建议根据实际情况"
+        }
+      ]
     },
     {
       "id": 2,
+      "eval_name": "team-stall",
       "prompt": "团队推进不动，项目卡在交接环节，该怎么处理？",
       "expected_output": "指出核心矛盾，提供分辨问题的信号，给出一个具体的下一步行动",
       "files": [],
-      "assertions": []
+      "assertions": [
+        {
+          "name": "names_core_tension",
+          "description": "Identifies the underlying tension, not surface symptoms",
+          "type": "text_pattern",
+          "pattern": "不是.*而是|核心|关键|本质"
+        },
+        {
+          "name": "provides_diagnostic_questions",
+          "description": "Provides questions to help diagnose the real issue",
+          "type": "min_count",
+          "pattern": "是.*还是|是否",
+          "min_count": 2
+        },
+        {
+          "name": "specific_action_item",
+          "description": "Gives one concrete next action, not abstract advice",
+          "type": "text_pattern",
+          "pattern": "下一步|先把|列出来|画出来"
+        }
+      ]
     },
     {
       "id": 3,
+      "eval_name": "incomplete-information",
       "prompt": "我手上信息不完整，但老板现在就要建议，我该怎么答？",
       "expected_output": "提供一个结构化的回答框架，包含已知事实、当前判断和翻转条件",
       "files": [],
-      "assertions": []
+      "assertions": [
+        {
+          "name": "provides_structured_framework",
+          "description": "Offers a structured framework for answering",
+          "type": "text_pattern",
+          "pattern": "三件事|三个|框架|已知|判断|翻转"
+        },
+        {
+          "name": "mentions_known_facts",
+          "description": "Includes guidance on stating what is known",
+          "type": "text_pattern",
+          "pattern": "已知|确认|事实"
+        },
+        {
+          "name": "mentions_flip_conditions",
+          "description": "Includes guidance on when the judgment would change",
+          "type": "text_pattern",
+          "pattern": "如果.*变|前提|翻转|改变"
+        },
+        {
+          "name": "no_wait_for_more_data",
+          "description": "Does not suggest waiting for more information",
+          "type": "not_contains",
+          "pattern": "先补充|等.*完整|信息不够"
+        }
+      ]
     },
     {
       "id": 4,
+      "eval_name": "why-answer-feels-inexperienced",
       "prompt": "为什么这段回答看起来正确，但不像一个真正做过事的人写的？",
       "expected_output": "指出缺失的具体要素，说明有经验的人会自然带出什么内容",
       "files": [],
-      "assertions": []
+      "assertions": [
+        {
+          "name": "identifies_missing_elements",
+          "description": "Names specific things that are missing from the answer",
+          "type": "min_count",
+          "pattern": "没有|缺少|缺失|少了",
+          "min_count": 1
+        },
+        {
+          "name": "describes_practitioner_behavior",
+          "description": "Describes what an experienced practitioner would naturally include",
+          "type": "text_pattern",
+          "pattern": "做过.*人|经验.*会|自然.*带出"
+        },
+        {
+          "name": "provides_improvement_direction",
+          "description": "Gives concrete advice on how to improve",
+          "type": "text_pattern",
+          "pattern": "补|加上|改成"
+        }
+      ]
     },
     {
       "id": 5,
+      "eval_name": "career-tacit-knowledge",
       "prompt": "职业选择的隐性成本有哪些？我现在有两份offer。",
       "expected_output": "列出具体的隐性成本信号，提供分辨的框架，给出判断标准",
       "files": [],
-      "assertions": []
+      "assertions": [
+        {
+          "name": "lists_specific_costs",
+          "description": "Lists concrete hidden costs, not abstract concepts",
+          "type": "min_count",
+          "pattern": "成本|代价|风险|机会",
+          "min_count": 2
+        },
+        {
+          "name": "provides_decision_framework",
+          "description": "Offers a way to think about the decision",
+          "type": "text_pattern",
+          "pattern": "看|框架|分辨|判断"
+        },
+        {
+          "name": "addresses_reversibility",
+          "description": "Mentions whether the decision is reversible",
+          "type": "text_pattern",
+          "pattern": "可逆|回头|切换|改变"
+        }
+      ]
     },
     {
       "id": 6,
+      "eval_name": "feature-trade-off",
       "prompt": "这个需求要不要做？做了有收益，但开发成本很高。",
       "expected_output": "给出具体的判断框架，说明什么情况下值得做、什么情况下不应该做",
       "files": [],
-      "assertions": []
+      "assertions": [
+        {
+          "name": "gives_decision_criteria",
+          "description": "Provides clear criteria for when to do it vs not",
+          "type": "text_pattern",
+          "pattern": "如果.*就.*如果|值得.*不.*应该"
+        },
+        {
+          "name": "addresses_opportunity_cost",
+          "description": "Mentions what would be given up by doing this",
+          "type": "text_pattern",
+          "pattern": "代价|放弃|资源|优先级"
+        },
+        {
+          "name": "contains_failure_condition",
+          "description": "States when this advice would not apply",
+          "type": "text_pattern",
+          "pattern": "除非|如果.*不|前提"
+        }
+      ]
     },
     {
       "id": 7,
+      "eval_name": "code-quality-general",
       "prompt": "怎么提高代码质量？",
       "expected_output": "提供有实操性的判断，而非泛泛而谈的原则",
       "files": [],
-      "assertions": []
+      "assertions": [
+        {
+          "name": "not_generic_principles",
+          "description": "Does not just list abstract principles like 'review', 'test', 'refactor'",
+          "type": "not_contains",
+          "pattern": "持续优化|加强.*Review|建立机制"
+        },
+        {
+          "name": "provides_concrete_starting_point",
+          "description": "Gives a specific place to start, not a comprehensive plan",
+          "type": "text_pattern",
+          "pattern": "先看|从.*开始|最.*是"
+        },
+        {
+          "name": "names_real_trade_off",
+          "description": "Acknowledges a real trade-off in the answer",
+          "type": "text_pattern",
+          "pattern": "代价|成本|但.*是|不是.*而是"
+        }
+      ]
     },
     {
       "id": 8,
+      "eval_name": "tacit-knowledge-debugging",
       "prompt": "用默会知识的角度，解释一下调试手感是什么？",
       "expected_output": "用具体的实践信号解释抽象概念，而非诉诸神秘",
       "files": [],
-      "assertions": []
+      "assertions": [
+        {
+          "name": "concrete_not_mystical",
+          "description": "Explains the concept with concrete observable behaviors",
+          "type": "text_pattern",
+          "pattern": "信号|模式|经验.*会|注意"
+        },
+        {
+          "name": "no_mysticism",
+          "description": "Does not retreat into 'it can only be felt' mysticism",
+          "type": "not_contains",
+          "pattern": "只可意会|不可言传|难以言表|只可"
+        },
+        {
+          "name": "gives_examples",
+          "description": "Provides at least one concrete example",
+          "type": "text_pattern",
+          "pattern": "比如|例如|像"
+        }
+      ]
     },
     {
       "id": 9,
+      "eval_name": "no-trigger-json-extraction",
       "prompt": "Please extract the JSON data from this report and format it as a table.",
       "expected_output": "不触发此skill，直接执行任务",
       "files": [],
-      "assertions": []
+      "assertions": [
+        {
+          "name": "no_judgment_opening",
+          "description": "Does NOT start with 'my judgment is' since this task shouldn't trigger the skill",
+          "type": "not_contains",
+          "pattern": "我的判断是"
+        },
+        {
+          "name": "direct_task_execution",
+          "description": "Directly addresses the task request",
+          "type": "text_pattern",
+          "pattern": "JSON|表格|extract|table|数据"
+        }
+      ]
     },
     {
       "id": 10,
+      "eval_name": "no-trigger-pep8-check",
       "prompt": "Is this Python code compliant with PEP 8?",
       "expected_output": "不触发此skill，直接回答",
       "files": [],
-      "assertions": []
+      "assertions": [
+        {
+          "name": "no_judgment_opening",
+          "description": "Does NOT start with practitioner judgment for a factual question",
+          "type": "not_contains",
+          "pattern": "我的判断是"
+        },
+        {
+          "name": "factual_answer",
+          "description": "Provides a factual answer about code style",
+          "type": "text_pattern",
+          "pattern": "PEP|format|style|规范|缩进|命名"
+        }
+      ]
     }
   ]
 }
