@@ -181,6 +181,8 @@ If you are iterating on the skill rather than just installing it, start with:
 - `workbench/README.md`
 - `workbench/evals/protocol.md`
 
+The published GitHub Wiki is versioned in this repository under `docs/wiki/`.
+
 ## Troubleshooting
 
 ### The skill does not appear to load
@@ -226,6 +228,9 @@ workbench/
   agents/             # blind comparison and grading prompts
   scripts/            # assertion and benchmark helpers
   eval-viewer/        # HTML review generator
+
+docs/wiki/
+  *.md                # versioned source for the published GitHub Wiki
 ```
 
 ## Evaluation

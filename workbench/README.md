@@ -2,6 +2,8 @@
 
 This directory contains **maintainer-only** tooling for evaluating and refining the Michael Polanyi skill.
 
+The published GitHub Wiki is versioned in the main repository under `docs/wiki/`.
+
 ## Directory map
 
 - `agents/` - blind comparison and grading prompts
