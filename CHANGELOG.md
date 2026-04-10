@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.2] - 2026-04-10
+
+### Changed
+
+- **workbench/evals/evals.json**: each eval now binds to explicit fixture files under `workbench/evals/fixtures/`
+- **workbench/scripts/check_assertions.py**: added fixture suite mode, stronger eval structure validation, and machine-readable JSON output
+- **workbench/eval-viewer/generate_review.py**: added `--results` input and explicit `spec-only` vs result rendering
+- **.github/workflows/ci.yml**: fixture suite now gates eval validation, example balance check matches actual headings, and report generation uses suite results
+- **.gitignore**: evaluation artifact ignores now match `workbench/evals/results/`
+- **workbench/README.md** and **docs/wiki/Evaluation-Workflow.md**: documented canonical fixture workflow and separated spec review from result review
+
+### Added
+
+- **workbench/evals/fixtures/**: canonical fixture set for all 10 eval cases
+
+### Fixed
+
+- Removed the false-green path where example balance could pass as `0/0`
+- Removed the ambiguous workflow where assertions could be run against `examples.md` instead of formal fixtures
+- Removed the ambiguity where the HTML page could be mistaken for a real result report without suite output
+
 ## [0.5.1] - 2026-04-07
 
 ### Fixed

@@ -24,9 +24,11 @@ The goal is to make answers:
 The workbench evaluation flow depends on:
 
 - prompt set: `workbench/evals/prompts.md`
+- fixture set: `workbench/evals/fixtures/`
 - scoring rubric: `workbench/evals/rubric.md`
 - protocol: `workbench/evals/protocol.md`
-- optional HTML review output: `workbench/eval-viewer/review.html`
+- assertion suite output: `workbench/evals/results/latest.json`
+- optional HTML review output: `workbench/evals/results/review.html`
 
 ## Test Method
 
@@ -38,6 +40,13 @@ For each prompt:
 4. do not rewrite the prompt between runs
 
 For unstable prompts, use 2-3 repetitions before calling the result.
+
+For repository-level regression checks, keep a separate distinction:
+
+- `prompts.md` is the human prompt bank
+- `fixtures/` is the canonical machine-checked sample set
+- `check_assertions.py --suite` is the formal assertion run
+- the HTML page can be either `spec-only` or `results mode` depending on whether a result JSON is supplied
 
 ## Scoring Dimensions
 
@@ -76,6 +85,13 @@ Useful supporting artifacts:
 
 - assertion helpers in `workbench/scripts/`
 - blind comparison prompts in `workbench/agents/`
-- generated HTML review from `workbench/eval-viewer/`
+- generated suite JSON in `workbench/evals/results/`
+- generated HTML review in `workbench/evals/results/`
+
+Important boundary:
+
+- do not run the formal assertion suite against the whole `skills/michael-polanyi/examples.md`
+- use the canonical fixture files declared in `workbench/evals/evals.json`
+- treat `examples.md` as teaching/reference material, not as the test corpus
 
 If you want the broader maintainer loop around these checks, continue to [Maintainer Guide](Maintainer-Guide).

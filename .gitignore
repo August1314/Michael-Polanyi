@@ -17,9 +17,9 @@ desktop.ini
 ~/.agents/skills/michael-polanyi/
 
 # Evaluation artifacts
-evals/results/
-evals/outputs/
-evals/snapshots/
+workbench/evals/results/
+workbench/evals/outputs/
+workbench/evals/snapshots/
 *.eval.log
 eval-comparison-*.md
 

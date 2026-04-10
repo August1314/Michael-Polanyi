@@ -59,9 +59,10 @@ jobs:
 
       - name: Check eval files
         run: |
-          for f in evals.json prompts.md rubric.md; do
-            test -f "workbench/evals/$f" && echo "OK: $f" || echo "WARN: $f missing"
+          for f in evals.json prompts.md rubric.md protocol.md; do
+            test -f "workbench/evals/$f" && echo "OK: $f" || { echo "FAIL: $f missing"; exit 1; }
           done
+          test -d "workbench/evals/fixtures" && echo "OK: fixtures/" || { echo "FAIL: fixtures/ missing"; exit 1; }
 
       - name: Validate evals.json
         run: |
@@ -72,12 +73,16 @@ jobs:
           evals = d.get('evals', [])
           print(f'OK: {len(evals)} evals found')
           for i, e in enumerate(evals):
-              for k in ['id', 'eval_name', 'prompt', 'assertions']:
+              for k in ['id', 'eval_name', 'prompt', 'assertions', 'files']:
                   if k not in e:
                       print(f'FAIL: eval {i} missing {k}')
                       sys.exit(1)
           print('OK: all evals valid')
           PY
+
+      - name: Run fixture suite
+        run: |
+          python3 workbench/scripts/check_assertions.py --suite --output workbench/evals/results/latest.json
 
   code-quality:
     name: Code quality
@@ -124,10 +129,18 @@ jobs:
 
       - name: Check examples balance
         run: |
-          before=$(grep -c "## Before" skills/michael-polanyi/examples.md || echo 0)
-          after=$(grep -c "## After" skills/michael-polanyi/examples.md || echo 0)
-          echo "Before: $before, After: $after"
-          test "$before" -eq "$after" && echo "OK: balanced" || echo "WARN: unbalanced"
+          generic=$(grep -c "^### Generic answer$" skills/michael-polanyi/examples.md || true)
+          practitioner=$(grep -c "^### Practitioner answer$" skills/michael-polanyi/examples.md || true)
+          echo "Generic: $generic, Practitioner: $practitioner"
+          if [ "$generic" -eq 0 ] || [ "$practitioner" -eq 0 ]; then
+            echo "FAIL: example sections must be non-zero"
+            exit 1
+          fi
+          if [ "$generic" -ne "$practitioner" ]; then
+            echo "FAIL: examples are unbalanced"
+            exit 1
+          fi
+          echo "OK: balanced"
 
       - name: Run fluff detection
         run: |
@@ -139,7 +152,7 @@ jobs:
   generate-report:
     name: Generate report
     runs-on: ubuntu-latest
-    needs: validate-evals
+    needs: [validate-evals, content-quality, code-quality, lint-markdown]
     steps:
       - uses: actions/checkout@v6
 
@@ -147,14 +160,22 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Generate suite results
+        run: |
+          python3 workbench/scripts/check_assertions.py --suite --output workbench/evals/results/latest.json
+
       - name: Generate HTML review
         run: |
-          cd workbench/eval-viewer
-          test -f generate_review.py && test -f ../evals/evals.json && python3 generate_review.py && echo "OK: review generated" || echo "WARN: skipped"
+          python3 workbench/eval-viewer/generate_review.py \
+            --evals workbench/evals/evals.json \
+            --results workbench/evals/results/latest.json \
+            --output workbench/evals/results/review.html
 
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
           name: eval-review
-          path: workbench/eval-viewer/review.html
-          if-no-files-found: ignore
+          path: |
+            workbench/evals/results/latest.json
+            workbench/evals/results/review.html
+          if-no-files-found: error
