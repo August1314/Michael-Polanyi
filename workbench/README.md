@@ -18,29 +18,27 @@ The published GitHub Wiki is versioned in the main repository under `docs/wiki/`
    - `skills/michael-polanyi/examples.md`
    - `skills/michael-polanyi/polanyi-notes.md`
    - `skills/michael-polanyi/references/*`
-2. Run the eval checks described in `workbench/evals/protocol.md`.
-3. Review assertions, blind comparison, and generated review output.
+2. Run the fixture suite described in `workbench/evals/protocol.md`.
+3. Review suite assertions, blind comparison, and generated result report.
 4. Decide whether the change improved the skill, regressed it, or needs revision.
 5. Commit only after the updated runtime docs and workbench checks agree.
 
 ## Core commands
 
-Validate eval JSON:
+Run the fixture suite:
 
 ```bash
-python3 - <<'PY'
-import json
-with open('workbench/evals/evals.json') as f:
-    data = json.load(f)
-assert 'evals' in data and data['evals'], 'evals.json missing evals'
-print(f"OK: {len(data['evals'])} evals")
-PY
+python3 workbench/scripts/check_assertions.py \
+  --suite \
+  --output workbench/evals/results/latest.json
 ```
 
-Generate the HTML review page:
+Generate the HTML review page from the latest suite run:
 
 ```bash
-python3 workbench/eval-viewer/generate_review.py
+python3 workbench/eval-viewer/generate_review.py \
+  --results workbench/evals/results/latest.json \
+  --output workbench/evals/results/review.html
 ```
 
 Run lightweight fluff detection against the examples:
@@ -48,3 +46,8 @@ Run lightweight fluff detection against the examples:
 ```bash
 python3 skills/michael-polanyi/scripts/detect_fluff.py skills/michael-polanyi/examples.md
 ```
+
+Important maintenance rule:
+
+- `workbench/evals/fixtures/` is the canonical eval input set.
+- Do not point assertion checks at the whole `skills/michael-polanyi/examples.md`; that file is teaching material, not the formal suite input.
