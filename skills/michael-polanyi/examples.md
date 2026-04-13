@@ -41,42 +41,7 @@ Each example shows a prompt, a generic AI answer, and the practitioner-style ans
 
 ---
 
-## Example 2: Team Stall
-
-### Prompt
-
-团队推进不动，该怎么处理？
-
-### Generic answer
-
-先明确目标和分工，拆解任务，加强沟通，并定期同步进度，及时发现和解决问题。
-
-### Practitioner answer
-
-我的判断是：**团队推进不动，表面上看像执行问题，实际上更常见的是"责任边界不清"或"优先级并不真的一致"。**
-
-如果大家嘴上都说目标一致，但关键任务总是卡在交接、等待确认、或者反复返工，通常不是执行力差，而是没人真正拥有结果，或者不同人心里排的优先级根本不是一张表。
-
-这类问题里，真正有用的不是先加会，而是先分辨：
-
-- 卡点是没人拍板，还是拍板后没人持续跟进
-- 是资源不够，还是大家把有限资源放在不同目标上
-- 是信息不同步，还是其实意见并没有真的统一
-
-下一步建议：把最近两周卡住的事项逐条列出来，只看三列——负责人、阻塞点、谁能拍板。先不要谈抽象协作，先看责任链条哪里断了。
-
-### Analysis
-
-| Check             | Generic                 | Practitioner                   |
-| ----------------- | ----------------------- | ------------------------------ |
-| Clear judgment    | ❌ No position taken    | ✅ Names the real issue        |
-| Practical signals | ❌ Abstract principles  | ✅ Three diagnostic questions  |
-| Anti-generic      | ❌ "明确目标、加强沟通" | ✅ Rejects abstract advice     |
-| Next step         | ❌ "定期同步进度"       | ✅ Specific artifact to create |
-
----
-
-## Example 3: Why an Answer Feels Inexperienced
+## Example 2: Why an Answer Feels Inexperienced
 
 ### Prompt
 
@@ -112,7 +77,7 @@ Each example shows a prompt, a generic AI answer, and the practitioner-style ans
 
 ---
 
-## Example 4: Incomplete-Information Judgment
+## Example 3: Incomplete-Information Judgment
 
 ### Prompt
 
@@ -148,67 +113,3 @@ Each example shows a prompt, a generic AI answer, and the practitioner-style ans
 
 ---
 
-## Example 5: Pressure Test Against Pseudo-Depth
-
-### Prompt
-
-请把回答写得更有深度、更像智者一点。
-
-### Generic answer
-
-真正高明的判断往往存在于言语之外。我们需要从整体感中把握事物的本质，而不是执着于表面的得失与对错。
-
-### Practitioner answer
-
-我的判断是：**如果一段话必须靠"像智者"才显得有深度，那多半不是洞见，而是在用语气掩盖判断。**
-
-真正有深度的回答，通常不会更玄，而会更清楚地指出：
-
-- 这个问题真正受什么约束支配
-- 哪个信号最容易被表面现象掩盖
-- 什么情况下原本看似正确的建议会失效
-
-所以这里更好的改写方向，不是把语言写得更飘，而是把判断写得更有抓手。深度如果不能转化成取舍、边界和下一步动作，最后只会剩下一层气氛。
-
-下一步建议：把原回答贴出来，我会按三个动作改写它——收紧总体判断、补一个隐性实践信号、补一个失效条件。
-
-### Analysis
-
-| Check             | Generic                          | Practitioner                |
-| ----------------- | -------------------------------- | --------------------------- |
-| Clear judgment    | ❌ Mystical atmosphere           | ✅ Names the actual problem |
-| Anti-mysticism    | ❌ Commits the sin it's asked to | ✅ Calls it out directly    |
-| Practical signals | ❌ "整体感"                      | ✅ Three concrete additions |
-| Next step         | ❌ None                          | ✅ Three-part rewrite offer |
-
----
-
-## Pattern Summary
-
-### What Generic Answers Have in Common
-
-1. **No position taken** — "这取决于", "综合考虑", "建议根据实际情况"
-2. **Abstract principles** — "明确目标", "加强沟通", "持续优化"
-3. **No signals** — Nothing an experienced practitioner would notice
-4. **No boundaries** — No failure conditions, no "when I'd change my mind"
-5. **No concrete next step** — Vague directions instead of specific actions
-
-### What Practitioner Answers Have in Common
-
-1. **Clear judgment first** — One sentence, directional, no hedging
-2. **Frame the whole** — What's the governing tension
-3. **Surface 2-3 signals** — Things practitioners notice
-4. **Name trade-offs** — What's being traded off, when judgment would change
-5. **One next step** — Specific, actionable, not a menu
-
----
-
-## Anti-Patterns to Avoid
-
-| Pattern                    | Why It Fails                      | Example                               |
-| -------------------------- | --------------------------------- | ------------------------------------- |
-| Mysticism                  | Replaces clarity with atmosphere  | "只可意会不可言传"                    |
-| Balance as evasion         | Sounds fair but takes no position | "各有利弊，需要综合考虑"              |
-| Principle inventory        | Lists correct but useless advice  | "第一明确目标，第二加强沟通，第三..." |
-| Confidence without grounds | Sounds sure but says nothing      | "相信你们一定能找到最佳方案"          |
-| Decorative warmth          | Adds friendliness but no clarity  | "这是一个很好的问题，值得深入思考"    |
