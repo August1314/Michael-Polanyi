@@ -20,7 +20,7 @@ from pathlib import Path
 def aggregate_results(results_dir: Path) -> dict:
     """Aggregate all result files in the directory."""
     
-    result_files = list(results_dir.glob("*.json"))
+    result_files = sorted(results_dir.glob("*.json"))
     if not result_files:
         return {"error": "No result files found"}
     
@@ -28,6 +28,12 @@ def aggregate_results(results_dir: Path) -> dict:
     for f in result_files:
         try:
             data = json.loads(f.read_text())
+            # Skip files that are not run results (e.g., aggregate output like benchmark.json
+            # which has evals as a dict instead of a list)
+            evals = data.get("evals")
+            if not isinstance(evals, list):
+                print(f"Skipping {f.name}: not a suite result file (missing 'evals' list)")
+                continue
             all_results.append({
                 "file": f.name,
                 "timestamp": datetime.fromtimestamp(f.stat().st_mtime).isoformat(),
